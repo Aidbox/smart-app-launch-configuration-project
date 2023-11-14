@@ -1,0 +1,33 @@
+{:ns     system
+ :import #{aidbox
+           aidbox.config}
+
+ search-config
+ {:zen/tags         #{aidbox.config/search}
+  :zen-fhir         :disable
+  :resource-compat  false
+  :engine           :knife
+  :fhir-comparisons true
+  :default-params   {:timeout 30
+                     :total   "none"
+                     :count   100}
+  :chain            {:subselect true}}
+
+ compatibility-config
+ {:zen/tags   #{aidbox.config/compatibility}
+  :validation {:json-schema {:regex #{:fhir-datetime}}}
+  :auth       {:pkce {:code-challenge {:s256 {:conformant true}}}}}
+
+ zen-config
+ {:zen/tags                #{aidbox.config/portal-config}
+  :search                  search-config
+  :compatibility           compatibility-config
+  :fhir-version            "4.0.1"
+  :compliant-mode-enabled? true
+  :override-createdat-url  "http://fhir.aidbox.app/extension/createdat"
+  :correct-aidbox-format   true}
+
+ box
+ {:zen/tags #{aidbox/system}
+  :config   zen-config
+  :audit    {:storage "AuditEvent"}}}
