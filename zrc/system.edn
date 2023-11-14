@@ -1,6 +1,7 @@
 {:ns     system
  :import #{aidbox
-           aidbox.config}
+           aidbox.config
+           hl7-fhir-r4-core}
 
  search-config
  {:zen/tags         #{aidbox.config/search}
