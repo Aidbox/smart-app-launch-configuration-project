@@ -1,1 +1,1 @@
-# balp-audit-log-configuration-project
+# smart-on-fhir-configuration-project

@@ -1,7 +1,39 @@
-{:ns     system
- :import #{aidbox
-           aidbox.config
-           hl7-fhir-r4-core}
+{ns     system
+ import #{aidbox
+          aidbox.auth
+          aidbox.oauth2
+          aidbox.patient-api.v1}
+
+ grant-lookup-method
+ {:zen/tags #{aidbox.auth/grant-lookup}
+  :method   aidbox.auth/single-patient-grant-lookup}
+
+ seeds
+ {:zen/tags #{aidbox/service}
+  :engine   aidbox/seed-v2
+  :resources
+  {:Patient
+   {:my-patient
+    {}}
+   :User
+   {:my-user
+    {:email    "my@example.com"
+     :password "password"
+     :fhirUser {:resourceType "Patient"
+                :id           "my-patient"}}}
+
+   :AccessPolicy
+   {:allow-public-operation
+    {:engine "matcho"
+     :matcho {:uri {:$one-of ["/patient/fhir/metadata"
+                              "/patient/fhir/style-v1.json"
+                              "/patient/fhir/.well-known/smart-configuration"
+                              "/patient/auth/login"
+                              "/patient/auth/authorize"
+                              "/patient/auth/authenticate"
+                              "/patient/auth/grant"]}}}
+    :allow-fhir-api
+    {:engine "smart-on-fhir"}}}}
 
  search-config
  {:zen/tags         #{aidbox.config/search}
@@ -30,5 +62,4 @@
 
  box
  {:zen/tags #{aidbox/system}
-  :config   zen-config
-  :audit    {:storage "AuditEvent"}}}
+  :services {:seeds seeds :scopes aidbox.oauth2/scopes}}}
