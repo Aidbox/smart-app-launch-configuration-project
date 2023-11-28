@@ -1,1 +1,1 @@
-# smart-on-fhir-configuration-project
+# smart-app-launch-configuration-project
